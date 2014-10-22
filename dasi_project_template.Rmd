@@ -1,0 +1,76 @@
+---
+title: "Analysis on the Relations between Subjective Class and Objective family Income Status"
+date: "2014.10.21"
+author: "Han-Wool Jeong"
+output:
+  html_document:
+    theme: cerulean
+---
+
+<!-- For more info on RMarkdown see http://rmarkdown.rstudio.com/ -->
+
+<!-- Enter the code required to load your data in the space below. The data will be loaded but the line of code won't show up in your write up (echo=FALSE) in order to save space-->
+```{r echo=FALSE}
+load(url("http://bit.ly/dasi_gss_data"))
+```
+
+<!-- In the remainder of the document, add R code chunks as needed -->
+
+### Introduction:
+
+This analysis is to verify if subjective class identification represents objective class status correctly by using "General Social Survey Cumulative File, 1972-2012 Coursera Extract." My hyperthesis is that there is a difference between the average of respondent's family income from self reported classes.
+
+To compare means of 3+ groups, I use a test called analsys of variance(ANOVA) and F statisic.
+
+H0: M1 =M2 = ... Mk 
+HA: At least one pair of means are different from each other. 
+
+
+### Data:
+(1) Description
+
+- variable y <- gss$coninc (numeric variable)
+```{r}
+summary(gss$coninc)
+boxplot(gss$coninc)
+```
+
+- variable x <- gss$class
+```{r}
+table(gss$class)
+barplot(table(gss$class))
+
+```
+
+Insert data section here...
+
+### Exploratory data analysis:
+
+-Data Cleaning
+```{r}
+y <- gss$coninc
+x <- gss$class
+x_clean <- x[x != "No Class"] # excluding "No Class"
+droplevels(x_clean)
+```
+
+- loading inference # function
+```{r}
+source("http://bit.ly/dasi_inference")
+```
+
+- ANOVA Test
+```{r}
+inference(y, x_clean, est="mean", type="ht",alternative="greater", method="theoretical")
+
+```
+
+### Inference:
+
+- p-value is the probability of at least as large a ratio between the "between" and "within" group variabilities if in fact the means of all groups are equal.
+- According to the results from ANOVA test, p-value is very small and less than alpa, reject Ho. 
+- The Data provides convincing evidence that at least one pair of population means of family income are different from selp reported class
+
+### Conclusion:
+
+For American adults, the variable of "subjective class" is a valid indicator to represent the difference in the objective income status. 
